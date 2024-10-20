@@ -17,6 +17,14 @@ struct CreateAccountView: View {
     
     @State private var confirmPassword: String = .empty
     
+    @ObservedObject private var viewModel: AuthViewModel
+    
+    @Environment(\.dismiss) var dismiss
+    
+    init(viewModel: AuthViewModel) {
+        self.viewModel = viewModel
+    }
+    
     var body: some View {
         VStack {
             Text("Please complete all information to create account")
@@ -29,18 +37,26 @@ struct CreateAccountView: View {
             VStack(spacing: 15) {
                 BottomDividerView {
                     TextField("Email or Phone number", text: $email)
+                        .keyboardType(.emailAddress)
+                        .textContentType(.emailAddress)
+                        .autocorrectionDisabled()
+                        .textInputAutocapitalization(.never)
                 }
                 
                 BottomDividerView {
                     TextField("Full name", text: $fullName )
+                        .keyboardType(.namePhonePad)
+                        .textContentType(.name)
                 }
                 
                 BottomDividerView {
-                    TextField("Password", text: $password)
+                    SecureField("Password", text: $password)
+                        .textContentType(.password)
                 }
                 
                 BottomDividerView {
-                    TextField("Confirm Password", text: $confirmPassword)
+                    SecureField("Confirm Password", text: $confirmPassword)
+                        .textContentType(.password)
                         .overlay(alignment: .trailing) {
                             if password.isEmpty == false, confirmPassword.isEmpty == false {
                                 Image(systemName: isValidPassword ? "checkmark.circle.fill" : "xmark.circle.fill")
@@ -54,8 +70,12 @@ struct CreateAccountView: View {
             
             Spacer()
             
-            Button("Create Account") { }
-                .buttonStyle(CapsuleButtonStyle(bgColor: .teal, fgColor: .white))
+            Button("Create Account") {
+                Task {
+                    await createUser()
+                }
+            }
+            .buttonStyle(CapsuleButtonStyle(bgColor: .teal, fgColor: .white))
         }
         .padding(.horizontal)
         .navigationTitle("Set up your account")
@@ -68,8 +88,22 @@ struct CreateAccountView: View {
     }
 }
 
+extension CreateAccountView {
+    
+    @MainActor
+    func createUser() async {
+        await viewModel.createUser(email: email, fullName: fullName, password: password)
+        dismiss()
+    }
+}
+
 #Preview {
     NavigationStack {
-        CreateAccountView()
+        CreateAccountView(
+            viewModel: AuthViewModel(
+                authentication: FirebaseAuthentication(),
+                userSession: FirebaseUserSession()
+            )
+        )
     }
 }

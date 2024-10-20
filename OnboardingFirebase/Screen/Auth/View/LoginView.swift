@@ -13,11 +13,25 @@ struct LoginView: View {
     
     @State private var password = String.empty
     
+    @StateObject private var viewModel: AuthViewModel
+    
+    @EnvironmentObject private var router: NavigationRouter
+    
+    init(viewModel: AuthViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         content
+            .navigationBarBackButtonHidden()
             .ignoresSafeArea(edges: .top)
             .padding(.horizontal)
             .padding(.vertical, 5)
+            .onChange(of: viewModel.isLoginComplete) { _, newValue in
+                if newValue {
+                    router.didAuthenticationFinish()
+                }
+            }
     }
 }
 
@@ -31,7 +45,7 @@ extension LoginView {
                 spacer()
                 signup
             }
-        }
+        }.scrollIndicatorsFlash(onAppear: true)
     }
     
     private var headerImage: some View {
@@ -50,27 +64,38 @@ extension LoginView {
             
             BottomDividerView {
                 TextField("Email or Phone number", text: $email)
+                    .keyboardType(.emailAddress)
+                    .textContentType(.emailAddress)
+                    .autocorrectionDisabled()
+                    .textInputAutocapitalization(.never)
             }
             
             BottomDividerView {
                 SecureField("Password", text: $password)
+                    .textContentType(.password)
             }
             
             HStack {
                 Spacer()
-                Button("Forgot Password ?") { }
-                    .foregroundStyle(.gray)
-                    .font(.subheadline)
+                Button("Forgot Password ?") {
+                    router.push(NavigationIdentifier.Authentication.forgotPassword)
+                }
+                .foregroundStyle(.gray)
+                .font(.subheadline)
             }
             .padding(.vertical)
             
-            Button("Login") { }
-                .buttonStyle(
-                    CapsuleButtonStyle(
-                        bgColor: .teal,
-                        fgColor: .white
-                    )
+            Button("Login") {
+                Task {
+                    await viewModel.logIn(email: email, password: password)
+                }
+            }
+            .buttonStyle(
+                CapsuleButtonStyle(
+                    bgColor: .teal,
+                    fgColor: .white
                 )
+            )
         }
     }
     
@@ -120,8 +145,8 @@ extension LoginView {
     }
     
     private var footer: some View {
-        NavigationLink {
-            CreateAccountView()
+        Button {
+            router.push(NavigationIdentifier.Authentication.signUp(viewModel: viewModel))
         } label: {
             HStack {
                 Text("Don't have an account ?")
@@ -136,10 +161,15 @@ extension LoginView {
     private func spacer(spacing: CGFloat = 35) -> some View {
         Spacer().frame(height: spacing)
     }
-}
+} 
 
 #Preview {
     NavigationStack {
-        LoginView()
+        LoginView(
+            viewModel: AuthViewModel(
+                authentication: FirebaseAuthentication(),
+                userSession: FirebaseUserSession()
+            )
+        )
     }
 }

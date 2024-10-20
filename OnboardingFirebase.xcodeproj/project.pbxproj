@@ -6,8 +6,25 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		86F680052CC435B200E679D4 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 86F680042CC435B200E679D4 /* FirebaseAuth */; };
+		86F680072CC435B200E679D4 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 86F680062CC435B200E679D4 /* FirebaseFirestore */; };
+		86F680092CC435B200E679D4 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 86F680082CC435B200E679D4 /* FirebaseStorage */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		86D0031F2CC522690050D20A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 86ADAFD72CC4032100FA743E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 86ADAFDE2CC4032100FA743E;
+			remoteInfo = OnboardingFirebase;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		86ADAFDF2CC4032100FA743E /* OnboardingFirebase.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OnboardingFirebase.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86D0031B2CC522690050D20A /* OnboardingFirebaseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OnboardingFirebaseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -16,10 +33,30 @@
 			path = OnboardingFirebase;
 			sourceTree = "<group>";
 		};
+		86D0031C2CC522690050D20A /* OnboardingFirebaseTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = OnboardingFirebaseTests;
+			sourceTree = "<group>";
+		};
+		86D003292CC525710050D20A /* Stubs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Stubs;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		86ADAFDC2CC4032100FA743E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86F680052CC435B200E679D4 /* FirebaseAuth in Frameworks */,
+				86F680072CC435B200E679D4 /* FirebaseFirestore in Frameworks */,
+				86F680092CC435B200E679D4 /* FirebaseStorage in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86D003182CC522690050D20A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -32,7 +69,9 @@
 		86ADAFD62CC4032100FA743E = {
 			isa = PBXGroup;
 			children = (
+				86D003272CC525690050D20A /* Shared */,
 				86ADAFE12CC4032100FA743E /* OnboardingFirebase */,
+				86D0031C2CC522690050D20A /* OnboardingFirebaseTests */,
 				86ADAFE02CC4032100FA743E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,9 +80,19 @@
 			isa = PBXGroup;
 			children = (
 				86ADAFDF2CC4032100FA743E /* OnboardingFirebase.app */,
+				86D0031B2CC522690050D20A /* OnboardingFirebaseTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
+		};
+		86D003272CC525690050D20A /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				86D003292CC525710050D20A /* Stubs */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 /* End PBXGroup section */
 
@@ -62,13 +111,41 @@
 			);
 			fileSystemSynchronizedGroups = (
 				86ADAFE12CC4032100FA743E /* OnboardingFirebase */,
+				86D003292CC525710050D20A /* Stubs */,
 			);
 			name = OnboardingFirebase;
 			packageProductDependencies = (
+				86F680042CC435B200E679D4 /* FirebaseAuth */,
+				86F680062CC435B200E679D4 /* FirebaseFirestore */,
+				86F680082CC435B200E679D4 /* FirebaseStorage */,
 			);
 			productName = OnboardingFirebase;
 			productReference = 86ADAFDF2CC4032100FA743E /* OnboardingFirebase.app */;
 			productType = "com.apple.product-type.application";
+		};
+		86D0031A2CC522690050D20A /* OnboardingFirebaseTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86D003212CC522690050D20A /* Build configuration list for PBXNativeTarget "OnboardingFirebaseTests" */;
+			buildPhases = (
+				86D003172CC522690050D20A /* Sources */,
+				86D003182CC522690050D20A /* Frameworks */,
+				86D003192CC522690050D20A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				86D003202CC522690050D20A /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				86D0031C2CC522690050D20A /* OnboardingFirebaseTests */,
+				86D003292CC525710050D20A /* Stubs */,
+			);
+			name = OnboardingFirebaseTests;
+			packageProductDependencies = (
+			);
+			productName = OnboardingFirebaseTests;
+			productReference = 86D0031B2CC522690050D20A /* OnboardingFirebaseTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -83,6 +160,10 @@
 					86ADAFDE2CC4032100FA743E = {
 						CreatedOnToolsVersion = 16.0;
 					};
+					86D0031A2CC522690050D20A = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 86ADAFDE2CC4032100FA743E;
+					};
 				};
 			};
 			buildConfigurationList = 86ADAFDA2CC4032100FA743E /* Build configuration list for PBXProject "OnboardingFirebase" */;
@@ -94,18 +175,29 @@
 			);
 			mainGroup = 86ADAFD62CC4032100FA743E;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				86F680032CC435B200E679D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 86ADAFE02CC4032100FA743E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				86ADAFDE2CC4032100FA743E /* OnboardingFirebase */,
+				86D0031A2CC522690050D20A /* OnboardingFirebaseTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		86ADAFDD2CC4032100FA743E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		86D003192CC522690050D20A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -122,7 +214,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		86D003172CC522690050D20A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		86D003202CC522690050D20A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 86ADAFDE2CC4032100FA743E /* OnboardingFirebase */;
+			targetProxy = 86D0031F2CC522690050D20A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		86ADAFEB2CC4032200FA743E /* Debug */ = {
@@ -308,6 +415,52 @@
 			};
 			name = Release;
 		};
+		86D003222CC522690050D20A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 98GGD2LM74;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avii.OnboardingFirebaseTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OnboardingFirebase.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OnboardingFirebase";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		86D003232CC522690050D20A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 98GGD2LM74;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 14.7;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.avii.OnboardingFirebaseTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OnboardingFirebase.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/OnboardingFirebase";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -329,7 +482,45 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		86D003212CC522690050D20A /* Build configuration list for PBXNativeTarget "OnboardingFirebaseTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86D003222CC522690050D20A /* Debug */,
+				86D003232CC522690050D20A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		86F680032CC435B200E679D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.3.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		86F680042CC435B200E679D4 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F680032CC435B200E679D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		86F680062CC435B200E679D4 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F680032CC435B200E679D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		86F680082CC435B200E679D4 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 86F680032CC435B200E679D4 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 86ADAFD72CC4032100FA743E /* Project object */;
 }
