@@ -9,9 +9,13 @@ import SwiftUI
 
 struct ForgotPasswordView: View {
     
-    @EnvironmentObject private var router: NavigationRouter
-    
     @State private var email: String = .empty
+    
+    @ObservedObject private var viewModel: ForgotPasswordViewModel
+    
+    init(viewModel: ForgotPasswordViewModel) {
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -33,8 +37,9 @@ struct ForgotPasswordView: View {
             .padding(.top, 15)
             
             Button("Send Instructions") {
-                router.push(NavigationIdentifier.Authentication.emailSent)
-                email = .empty
+                Task {
+                    await viewModel.forgotPassword(email: email)
+                }
             }
             .buttonStyle(CapsuleButtonStyle(bgColor: .teal, fgColor: .white))
             .padding(.top)
@@ -43,9 +48,15 @@ struct ForgotPasswordView: View {
         }
         .padding()
         .toolbarRole(.editor)
+        .onChange(of: viewModel.isEmailSent) { _, newValue in
+            if newValue {
+                email = .empty
+//                router.push(NavigationIdentifier.Authentication.emailSent)
+            }
+        }
     }
 }
 
 #Preview {
-    ForgotPasswordView()
+    ForgotPasswordView(viewModel: ForgotPasswordViewModel(forgotPasswordService: ForgotPasswordServiceStub()))
 }

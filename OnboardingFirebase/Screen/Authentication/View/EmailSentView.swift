@@ -9,7 +9,7 @@ import SwiftUI
 
 struct EmailSentView: View {
     
-    @EnvironmentObject private var router: NavigationRouter
+    //@EnvironmentObject private var router: NavigationRouter
     
     var body: some View {
         VStack (spacing: 24) {
@@ -41,7 +41,7 @@ struct EmailSentView: View {
             Spacer()
             
             Button {
-                router.pop()
+                //router.pop()
             } label: {
                 Text("Didn't receive the email? Check your spam filter, or ")
                     .foregroundStyle(.gray)

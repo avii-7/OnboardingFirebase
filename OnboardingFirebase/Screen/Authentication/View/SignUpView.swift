@@ -1,5 +1,5 @@
 //
-//  CreateAccountView.swift
+//  SignUpView.swift
 //  OnboardingFirebase
 //
 //  Created by Arun on 19/10/24.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CreateAccountView: View {
+struct SignUpView: View {
     
     @State private var email: String = .empty
     
@@ -17,12 +17,12 @@ struct CreateAccountView: View {
     
     @State private var confirmPassword: String = .empty
     
-    @ObservedObject private var viewModel: AuthViewModel
+    @StateObject private var viewModel: SignUpViewModel
     
     @Environment(\.dismiss) var dismiss
     
-    init(viewModel: AuthViewModel) {
-        self.viewModel = viewModel
+    init(actions: Actions, viewModel: SignUpViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
@@ -88,22 +88,27 @@ struct CreateAccountView: View {
     }
 }
 
-extension CreateAccountView {
+extension SignUpView {
     
-    @MainActor
-    func createUser() async {
-        await viewModel.createUser(email: email, fullName: fullName, password: password)
+    @MainActor func createUser() async {
+        await viewModel.signUp(email: email, fullName: fullName, password: password)
         dismiss()
+    }
+}
+
+// MARK: - Actions
+extension SignUpView {
+    
+    struct Actions {
+        let didSignUpFinished: () -> Void
     }
 }
 
 #Preview {
     NavigationStack {
-        CreateAccountView(
-            viewModel: AuthViewModel(
-                authentication: FirebaseAuthentication(),
-                userSession: FirebaseUserSession()
-            )
+        SignUpView(
+            actions: .init(didSignUpFinished: { }),
+            viewModel: SignUpViewModel(service: SignUpServiceStub(), userSession: UserSessionStub())
         )
     }
 }

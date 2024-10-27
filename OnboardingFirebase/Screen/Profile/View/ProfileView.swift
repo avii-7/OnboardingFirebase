@@ -11,8 +11,6 @@ struct ProfileView: View {
     
     @StateObject private var viewModel: ProfileViewModel
     
-    @EnvironmentObject private var router: NavigationRouter
-    
     init(viewModel: ProfileViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
@@ -22,7 +20,7 @@ struct ProfileView: View {
             .navigationBarBackButtonHidden()
             .onChange(of: viewModel.shouldDismiss, { oldValue, newValue in
                 if newValue {
-                    router.didLogout()
+                    //router.didLogout()
                 }
             })
             .task {

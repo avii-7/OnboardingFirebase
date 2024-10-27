@@ -14,16 +14,19 @@ enum FirebaseUserSessionError: Error {
 
 final class FirebaseUserSession: UserSession {
     
-    var isUserLoggedIn: Bool { user != nil }
+    var isUserLoggedIn: Bool { auth.currentUser != nil }
     
     var user: User?
     
     lazy private var auth = Auth.auth()
     
+    lazy private var firestore = Firestore.firestore()
+    
     // TODO: Should be done in profile
+    // FIXME: - CurrentUser can contain my user information
     func fetchUser() async throws {
         if let firebaseUser = auth.currentUser {
-            let document = try await Firestore.firestore().collection("users").document(firebaseUser.uid).getDocument()
+            let document = try await firestore.collection("users").document(firebaseUser.uid).getDocument()
             user = try document.data(as: User.self)
         }
         else {

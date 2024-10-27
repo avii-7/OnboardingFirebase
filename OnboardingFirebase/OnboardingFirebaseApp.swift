@@ -12,30 +12,38 @@ struct OnboardingFirebaseApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @State private var isCompleted = false
-    
-    private let userSession = AppCompositionRoot.userSession
-    private let authentication = AppCompositionRoot.Auth.authentication
-    
-    @StateObject private var router = NavigationRouter()
+    @StateObject private var appCoordinator = AppCoordinator()
     
     var body: some Scene {
         WindowGroup {
-            if isCompleted {
-                NavigationStack(path: $router.path) {
-                    MainView(userSession: userSession, authentication: authentication)
-                        .navigationDestination(for: NavigationIdentifier.Authentication.self, destination: { item in
-                            item.view
-                        })
-                        .navigationDestination(for: NavigationIdentifier.Profile.self, destination: { item in
-                            item.view
-                        })
-                }
-                .environmentObject(router)
+            NavigationStack(path: $appCoordinator.path) {
+                appCoordinator.getRootView()
+                    .navigationDestination(for: AuthCoordinator.Authentication.self, destination: { item in
+                        item.view
+                    })
+                    .navigationDestination(for: ProfileCoordinator.Profile.self, destination: { item in
+                        item.view
+                    })
             }
-            else {
-                SplashScreen(isCompleted: $isCompleted, userSession: userSession)
-            }
+            .environmentObject(appCoordinator)
         }
     }
 }
+
+/**
+ if isCompleted {
+ NavigationStack(path: $appCoordinator.path) {
+ appCoordinator.getRootView()
+ .navigationDestination(for: NavigationIdentifier.Authentication.self, destination: { item in
+ item.view
+ })
+ .navigationDestination(for: NavigationIdentifier.Profile.self, destination: { item in
+ item.view
+ })
+ }
+ .environmentObject(appCoordinator)
+ }
+ else {
+ SplashScreen(isCompleted: $isCompleted, userSession: appCoordinator)
+ }
+ */

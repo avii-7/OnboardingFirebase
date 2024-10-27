@@ -1,5 +1,5 @@
 //
-//  LoginView.swift
+//  SignInView.swift
 //  OnboardingFirebase
 //
 //  Created by Arun on 19/10/24.
@@ -7,18 +7,19 @@
 
 import SwiftUI
 
-struct LoginView: View {
+struct SignInView: View {
     
     @State private var email = String.empty
     
     @State private var password = String.empty
     
-    @StateObject private var viewModel: AuthViewModel
+    @StateObject private var viewModel: SignInViewModel
     
-    @EnvironmentObject private var router: NavigationRouter
+    private let actions: Actions
     
-    init(viewModel: AuthViewModel) {
+    init(actions: Actions, viewModel: SignInViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
+        self.actions = actions
     }
     
     var body: some View {
@@ -27,15 +28,15 @@ struct LoginView: View {
             .ignoresSafeArea(edges: .top)
             .padding(.horizontal)
             .padding(.vertical, 5)
-            .onChange(of: viewModel.isLoginComplete) { _, newValue in
+            .onChange(of: viewModel.isSignInCompleted) { _, newValue in
                 if newValue {
-                    router.didAuthenticationFinish()
+                    actions.didSignInFinished()
                 }
             }
     }
 }
 
-extension LoginView {
+extension SignInView {
     
     private var content: some View {
         ScrollView {
@@ -78,16 +79,16 @@ extension LoginView {
             HStack {
                 Spacer()
                 Button("Forgot Password ?") {
-                    router.push(NavigationIdentifier.Authentication.forgotPassword)
+                    actions.showForgotPasswordView()
                 }
                 .foregroundStyle(.gray)
                 .font(.subheadline)
             }
             .padding(.vertical)
             
-            Button("Login") {
+            Button("SignIn") {
                 Task {
-                    await viewModel.logIn(email: email, password: password)
+                    await viewModel.signIn(email: email, password: password)
                 }
             }
             .buttonStyle(
@@ -146,7 +147,7 @@ extension LoginView {
     
     private var footer: some View {
         Button {
-            router.push(NavigationIdentifier.Authentication.signUp(viewModel: viewModel))
+            actions.showSignUpView()
         } label: {
             HStack {
                 Text("Don't have an account ?")
@@ -161,14 +162,25 @@ extension LoginView {
     private func spacer(spacing: CGFloat = 35) -> some View {
         Spacer().frame(height: spacing)
     }
-} 
+}
+
+// MARK: - Actions
+extension SignInView {
+    
+    struct Actions {
+        let didSignInFinished: () -> Void
+        let showSignUpView: () -> Void
+        let showForgotPasswordView: () -> Void
+    }
+}
 
 #Preview {
     NavigationStack {
-        LoginView(
-            viewModel: AuthViewModel(
-                authentication: FirebaseAuthentication(),
-                userSession: FirebaseUserSession()
+        SignInView(
+            actions: .init(didSignInFinished: {}, showSignUpView: {}, showForgotPasswordView: {}),
+            viewModel: SignInViewModel(
+                signInService: SignInServiceStub(),
+                userSession: UserSessionStub()
             )
         )
     }

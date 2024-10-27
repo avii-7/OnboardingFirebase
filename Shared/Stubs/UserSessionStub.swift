@@ -14,7 +14,7 @@ final class UserSessionStub: UserSession {
     var user: User?
     
     func fetchUser() async throws {
-        user = User(id: UUID().uuidString, email: "arunmehra1999@gmail.com", fullName: "Arun Mehra")
+        user = .dummy
         print("User Fetched !")
     }
     

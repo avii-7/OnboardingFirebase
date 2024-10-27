@@ -27,3 +27,11 @@ extension User {
 }
 
 extension User: Equatable { }
+
+extension User {
+    static var dummy = User(
+        id: UUID().uuidString,
+        email: "arunmehra@gmail.com",
+        fullName: "Arun Mehra"
+    )
+}
