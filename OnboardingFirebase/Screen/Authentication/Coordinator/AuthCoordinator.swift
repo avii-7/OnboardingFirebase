@@ -37,7 +37,7 @@ final class AuthCoordinator {
     }
     
     private func showSignUpView() {
-        delegate?.push(Authentication.signUp(.init(didSignUpFinished: didSignUpFinished), dIContainer.getSignUpViewModel()))
+        delegate?.push(Authentication.signUp(dIContainer.getSignUpViewModel(actions: .init(didSignUpFinished: didSignUpFinished))))
     }
     
     private func didSignUpFinished() {
@@ -53,7 +53,7 @@ extension AuthCoordinator {
     
     enum Authentication {
         
-        case signIn(SignInView.Actions, SignInViewModel), signUp(SignUpView.Actions, SignUpViewModel)
+        case signIn(SignInView.Actions, SignInViewModel), signUp(SignUpViewModel)
         case forgotPassword(ForgotPasswordViewModel), emailSent
         
         @ViewBuilder
@@ -61,8 +61,8 @@ extension AuthCoordinator {
             switch self {
             case .signIn(let actions, let viewModel):
                 SignInView(actions: actions, viewModel: viewModel)
-            case .signUp(let actions, let vm):
-                SignUpView(actions: actions, viewModel: vm)
+            case .signUp(let vm):
+                SignUpView(viewModel: vm)
             case .forgotPassword(let vm):
                 ForgotPasswordView(viewModel: vm)
             case .emailSent:

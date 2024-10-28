@@ -19,13 +19,19 @@ struct SignUpView: View {
     
     @StateObject private var viewModel: SignUpViewModel
     
-    @Environment(\.dismiss) var dismiss
-    
-    init(actions: Actions, viewModel: SignUpViewModel) {
+    init(viewModel: SignUpViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
+        content
+        .padding(.horizontal)
+        .navigationTitle("Set up your account")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarRole(.editor)
+    }
+    
+    private var content: some View {
         VStack {
             Text("Please complete all information to create account")
                 .font(.headline)
@@ -72,15 +78,11 @@ struct SignUpView: View {
             
             Button("Create Account") {
                 Task {
-                    await createUser()
+                    await viewModel.signUp(email: email, fullName: fullName, password: password)
                 }
             }
             .buttonStyle(CapsuleButtonStyle(bgColor: .teal, fgColor: .white))
         }
-        .padding(.horizontal)
-        .navigationTitle("Set up your account")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarRole(.editor)
     }
     
     private var isValidPassword: Bool {
@@ -88,27 +90,10 @@ struct SignUpView: View {
     }
 }
 
-extension SignUpView {
-    
-    @MainActor func createUser() async {
-        await viewModel.signUp(email: email, fullName: fullName, password: password)
-        dismiss()
-    }
-}
-
-// MARK: - Actions
-extension SignUpView {
-    
-    struct Actions {
-        let didSignUpFinished: () -> Void
-    }
-}
-
 #Preview {
     NavigationStack {
         SignUpView(
-            actions: .init(didSignUpFinished: { }),
-            viewModel: SignUpViewModel(service: SignUpServiceStub(), userSession: UserSessionStub())
+            viewModel: SignUpViewModel(service: SignUpServiceStub(), userSession: UserSessionStub(), actions: .init(didSignUpFinished: { }))
         )
     }
 }
