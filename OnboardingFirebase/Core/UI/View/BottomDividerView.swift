@@ -11,15 +11,15 @@ struct BottomDividerView<Content: View>: View {
     
     let spacing: CGFloat = 15
     
-    private let injectedView: () -> Content
+    private let injectedView: Content
     
-    init(@ViewBuilder injectedView: @escaping () -> Content) {
-        self.injectedView = injectedView
+    init(@ViewBuilder injectedView: () -> Content) {
+        self.injectedView = injectedView()
     }
     
     var body: some View {
         VStack(spacing: 15) {
-            injectedView()
+            injectedView
             Divider()
         }
     }
