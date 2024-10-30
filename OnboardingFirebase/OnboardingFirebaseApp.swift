@@ -12,7 +12,7 @@ struct OnboardingFirebaseApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    @StateObject private var appCoordinator = AppCoordinator()
+    @StateObject private var appCoordinator = AppCoordinator(path: NavigationPath(), dIContainer: AppDIContainer())
     
     var body: some Scene {
         WindowGroup {

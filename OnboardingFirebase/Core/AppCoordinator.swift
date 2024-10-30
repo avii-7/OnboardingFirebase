@@ -18,9 +18,14 @@ protocol Coordinator {
 
 final class AppCoordinator: Coordinator, ObservableObject {
     
-    @Published var path = NavigationPath()
+    @Published var path: NavigationPath
     
-    private let dIContainer = AppDIContainer()
+    private let dIContainer: AppDIContainer
+    
+    init(path: NavigationPath, dIContainer: AppDIContainer) {
+        self.path = path
+        self.dIContainer = dIContainer
+    }
     
     func getRootView() -> some View {
         MainView()

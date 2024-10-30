@@ -34,8 +34,8 @@ final class AuthDIContainer {
         authentication
     }
     
-    func getSignUpViewModel() -> SignUpViewModel {
-        SignUpViewModel(service: getSignUpService(), userSession: dependencies.userSession)
+    func getSignUpViewModel(actions: SignUpViewModel.NavigationActions) -> SignUpViewModel {
+        SignUpViewModel(service: getSignUpService(), userSession: dependencies.userSession, actions: actions)
     }
     
     // MARK: - SignIn
