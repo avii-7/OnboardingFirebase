@@ -12,6 +12,8 @@ protocol AuthCoordinatorDelegate: Coordinator, AnyObject {
     func didSignUpFinished()
     
     func didSignInFinished()
+    
+    func popToAuthentication()
 }
 
 final class AuthCoordinator {
@@ -45,7 +47,19 @@ final class AuthCoordinator {
     }
     
     private func showForgotPasswordView() {
-        delegate?.push(Authentication.forgotPassword(dIContainer.getForgotPasswordViewModel()))
+        delegate?.push(Authentication.forgotPassword(dIContainer.getForgotPasswordViewModel(navigationActions: .init(didTapForgotPassword: didTapForgotPassword))))
+    }
+    
+    private func didTapForgotPassword() {
+        delegate?.push(Authentication.emailSent(.init(didTapSkipButton: didTapSkipButton, didTapTryAnotherEmail: didTapAnotherEmail)))
+    }
+    
+    private func didTapSkipButton() {
+        delegate?.popToAuthentication()
+    }
+    
+    private func didTapAnotherEmail() {
+        delegate?.pop()
     }
 }
 
@@ -54,7 +68,7 @@ extension AuthCoordinator {
     enum Authentication {
         
         case signIn(SignInViewModel), signUp(SignUpViewModel)
-        case forgotPassword(ForgotPasswordViewModel), emailSent
+        case forgotPassword(ForgotPasswordViewModel), emailSent(EmailSentView.NavigationActions)
         
         @ViewBuilder
         var view: some View {
@@ -65,8 +79,8 @@ extension AuthCoordinator {
                 SignUpView(viewModel: vm)
             case .forgotPassword(let vm):
                 ForgotPasswordView(viewModel: vm)
-            case .emailSent:
-                EmailSentView()
+            case .emailSent(let navActions):
+                EmailSentView(navigationActions: navActions)
             }
         }
     }

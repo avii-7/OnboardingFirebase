@@ -70,6 +70,10 @@ final class AppCoordinator: Coordinator, ObservableObject {
 // MARK: - Auth Coordinator Delegate
 extension AppCoordinator: AuthCoordinatorDelegate {
     
+    func popToAuthentication() {
+        path.removeLast(path.count - 1)
+    }
+    
     func didSignUpFinished() {
         popToRoot()
         navigateToProfile()

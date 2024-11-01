@@ -9,19 +9,24 @@ import Foundation
 
 final class ForgotPasswordViewModel: ObservableObject {
     
-    @Published var isEmailSent = false
+    struct NavigationAction {
+        let didTapForgotPassword: () -> Void
+    }
     
     private let forgotPasswordService: ForgotPasswordService
     
-    init(forgotPasswordService: ForgotPasswordService) {
+    private let navigationActions: NavigationAction
+    
+    init(navigationActions: NavigationAction, forgotPasswordService: ForgotPasswordService) {
         self.forgotPasswordService = forgotPasswordService
+        self.navigationActions = navigationActions
     }
     
     @MainActor
     func forgotPassword(email: String) async {
         do {
             try await forgotPasswordService.forgotPassword(email: email)
-            isEmailSent = true
+            navigationActions.didTapForgotPassword()
         }
         catch {
             print(error)

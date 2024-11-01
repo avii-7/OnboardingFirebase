@@ -9,13 +9,20 @@ import SwiftUI
 
 struct EmailSentView: View {
     
-    //@EnvironmentObject private var router: NavigationRouter
+    struct NavigationActions {
+        let didTapSkipButton: () -> Void
+        let didTapTryAnotherEmail: () -> Void
+    }
+    
+    private let navigationActions: NavigationActions
+    
+    init(navigationActions: NavigationActions) {
+        self.navigationActions = navigationActions
+    }
     
     var body: some View {
         VStack (spacing: 24) {
-            
             Spacer()
-            
             Image(systemName: "envelope.fill")
                 .resizable()
                 .scaledToFit()
@@ -34,14 +41,14 @@ struct EmailSentView: View {
             }
             
             Button("Skip I'll confirm later") {
-                
+                navigationActions.didTapSkipButton()
             }
             .buttonStyle(CapsuleButtonStyle(bgColor: .teal, fgColor: .white))
             
             Spacer()
             
             Button {
-                //router.pop()
+                navigationActions.didTapTryAnotherEmail()
             } label: {
                 Text("Didn't receive the email? Check your spam filter, or ")
                     .foregroundStyle(.gray)
@@ -57,5 +64,9 @@ struct EmailSentView: View {
 }
 
 #Preview {
-    EmailSentView()
+    EmailSentView(navigationActions: .init(didTapSkipButton: {
+        print("Skip button pressed")
+    }, didTapTryAnotherEmail: {
+        print("Another email button pressed")
+    }))
 }

@@ -48,15 +48,9 @@ struct ForgotPasswordView: View {
         }
         .padding()
         .toolbarRole(.editor)
-        .onChange(of: viewModel.isEmailSent) { _, newValue in
-            if newValue {
-                email = .empty
-//                router.push(NavigationIdentifier.Authentication.emailSent)
-            }
-        }
     }
 }
 
-#Preview {
-    ForgotPasswordView(viewModel: ForgotPasswordViewModel(forgotPasswordService: ForgotPasswordServiceStub()))
-}
+//#Preview {
+//    ForgotPasswordView(viewModel: ForgotPasswordViewModel(forgotPasswordService: ForgotPasswordServiceStub()))
+//}

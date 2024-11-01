@@ -52,7 +52,7 @@ final class AuthDIContainer {
         authentication
     }
     
-    func getForgotPasswordViewModel() -> ForgotPasswordViewModel {
-        ForgotPasswordViewModel(forgotPasswordService: getForgotPasswordService())
+    func getForgotPasswordViewModel(navigationActions: ForgotPasswordViewModel.NavigationAction) -> ForgotPasswordViewModel {
+        ForgotPasswordViewModel(navigationActions: navigationActions, forgotPasswordService: getForgotPasswordService())
     }
 }
