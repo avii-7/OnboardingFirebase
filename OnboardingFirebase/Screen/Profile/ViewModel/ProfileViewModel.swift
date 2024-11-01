@@ -9,14 +9,20 @@ import Foundation
 
 final class ProfileViewModel: ObservableObject {
     
-    @Published var user: User?
+    struct NavigationAction {
+        let logOut: () -> Void
+        let deleteAccount: () -> Void
+    }
     
-    @Published var shouldDismiss = false
+    @Published var user: User?
     
     private var userSession: UserSession
     
-    init(userSession: UserSession) {
+    private let navigationActions: NavigationAction
+    
+    init(navigationActions: NavigationAction, userSession: UserSession) {
         self.userSession = userSession
+        self.navigationActions = navigationActions
     }
     
     @MainActor
@@ -34,7 +40,7 @@ final class ProfileViewModel: ObservableObject {
         do {
             try userSession.logOut()
             userSession.user = nil
-            shouldDismiss = true
+            navigationActions.logOut()
         }
         catch {
             print(error)
@@ -46,7 +52,7 @@ final class ProfileViewModel: ObservableObject {
         do {
             try await userSession.deleteAccount()
             userSession.user = nil
-            shouldDismiss = true
+            navigationActions.deleteAccount()
         }
         catch {
             print(error)

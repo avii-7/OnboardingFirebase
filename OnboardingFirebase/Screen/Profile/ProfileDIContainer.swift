@@ -19,8 +19,8 @@ final class ProfileDIContainer {
         self.dependencies = dependencies
     }
     
-    func getProfileViewModel() -> ProfileViewModel {
-        ProfileViewModel(userSession: dependencies.userSession)
+    func getProfileViewModel(navigationActions: ProfileViewModel.NavigationAction) -> ProfileViewModel {
+        ProfileViewModel(navigationActions: navigationActions, userSession: dependencies.userSession)
     }
     
     // MARK: - Coordinator

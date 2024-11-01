@@ -27,10 +27,6 @@ final class AppCoordinator: Coordinator, ObservableObject {
         self.dIContainer = dIContainer
     }
     
-    func getRootView() -> some View {
-        MainView()
-    }
-    
     func start() {
         if dIContainer.userSession.isUserLoggedIn {
             navigateToProfile()

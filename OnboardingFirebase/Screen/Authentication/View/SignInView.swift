@@ -15,11 +15,8 @@ struct SignInView: View {
     
     @StateObject private var viewModel: SignInViewModel
     
-    private let actions: Actions
-    
-    init(actions: Actions, viewModel: SignInViewModel) {
+    init(viewModel: SignInViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
-        self.actions = actions
     }
     
     var body: some View {
@@ -28,11 +25,6 @@ struct SignInView: View {
             .ignoresSafeArea(edges: .top)
             .padding(.horizontal)
             .padding(.vertical, 5)
-            .onChange(of: viewModel.isSignInCompleted) { _, newValue in
-                if newValue {
-                    actions.didSignInFinished()
-                }
-            }
     }
 }
 
@@ -79,7 +71,7 @@ extension SignInView {
             HStack {
                 Spacer()
                 Button("Forgot Password ?") {
-                    actions.showForgotPasswordView()
+                    viewModel.showForgotPasswordView()
                 }
                 .foregroundStyle(.gray)
                 .font(.subheadline)
@@ -147,7 +139,7 @@ extension SignInView {
     
     private var footer: some View {
         Button {
-            actions.showSignUpView()
+            viewModel.showSignUpView()
         } label: {
             HStack {
                 Text("Don't have an account ?")
@@ -164,21 +156,11 @@ extension SignInView {
     }
 }
 
-// MARK: - Actions
-extension SignInView {
-    
-    struct Actions {
-        let didSignInFinished: () -> Void
-        let showSignUpView: () -> Void
-        let showForgotPasswordView: () -> Void
-    }
-}
-
 #Preview {
     NavigationStack {
         SignInView(
-            actions: .init(didSignInFinished: {}, showSignUpView: {}, showForgotPasswordView: {}),
             viewModel: SignInViewModel(
+                navigationAction: .init(didSignInFinished: {}, showSignUpView: {}, showForgotPasswordView: {}),
                 signInService: SignInServiceStub(),
                 userSession: UserSessionStub()
             )

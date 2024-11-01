@@ -17,7 +17,7 @@ struct OnboardingFirebaseApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $appCoordinator.path) {
-                appCoordinator.getRootView()
+                VStack { }.onAppear { appCoordinator.start() }
                     .navigationDestination(for: AuthCoordinator.Authentication.self, destination: { item in
                         item.view
                     })
@@ -25,7 +25,6 @@ struct OnboardingFirebaseApp: App {
                         item.view
                     })
             }
-            .environmentObject(appCoordinator)
         }
     }
 }

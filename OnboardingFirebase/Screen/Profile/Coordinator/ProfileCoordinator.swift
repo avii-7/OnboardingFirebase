@@ -25,7 +25,15 @@ final class ProfileCoordinator {
     }
     
     func start() {
-        delegate?.push(Profile.profile(dIContainer.getProfileViewModel()))
+        delegate?.push(Profile.profile(dIContainer.getProfileViewModel(navigationActions: .init(logOut: didTapLogout, deleteAccount: didTapDeleteAccount))))
+    }
+    
+    private func didTapLogout() {
+        delegate?.didTapLogout()
+    }
+    
+    private func didTapDeleteAccount() {
+        delegate?.didTapDeleteAccount()
     }
 }
 
@@ -41,5 +49,4 @@ extension ProfileCoordinator {
             }
         }
     }
-    
 }

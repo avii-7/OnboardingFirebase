@@ -18,11 +18,6 @@ struct ProfileView: View {
     var body: some View {
         content
             .navigationBarBackButtonHidden()
-            .onChange(of: viewModel.shouldDismiss, { oldValue, newValue in
-                if newValue {
-                    //router.didLogout()
-                }
-            })
             .task {
                 await viewModel.fetchUser()
             }
@@ -71,7 +66,6 @@ extension ProfileView {
     
     private func accountSetting(using user: User) ->  some View {
         Group {
-            
             // MARK: Sign Out
             Button {
                 viewModel.logOut()
@@ -103,7 +97,7 @@ extension ProfileView {
         }
     }
 }
-
-#Preview {
-    ProfileView(viewModel: ProfileViewModel(userSession: UserSessionStub()))
-}
+//
+//#Preview {
+//    ProfileView(viewModel: ProfileViewModel(userSession: UserSessionStub()))
+//}

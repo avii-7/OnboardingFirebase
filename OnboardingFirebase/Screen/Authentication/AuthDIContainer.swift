@@ -30,7 +30,7 @@ final class AuthDIContainer {
     }
     
     // MARK: - SignUp
-    func getSignUpService() -> SignUpService {
+    private func getSignUpService() -> SignUpService {
         authentication
     }
     
@@ -39,12 +39,12 @@ final class AuthDIContainer {
     }
     
     // MARK: - SignIn
-    func getSignInService() -> SignInService {
+    private func getSignInService() -> SignInService {
         authentication
     }
     
-    func getSignInViewModel() -> SignInViewModel {
-        SignInViewModel(signInService: getSignInService(), userSession: dependencies.userSession)
+    func getSignInViewModel(actions: SignInViewModel.NavigationAction) -> SignInViewModel {
+        SignInViewModel(navigationAction: actions, signInService: getSignInService(), userSession: dependencies.userSession)
     }
     
     // MARK: - Forgot Password
