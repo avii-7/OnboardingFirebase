@@ -89,6 +89,13 @@ extension SignInView {
                     fgColor: .white
                 )
             )
+            
+            if viewModel.isError {
+                Text(viewModel.errorMsg)
+                    .font(.footnote)
+                    .foregroundStyle(.red).opacity(0.8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
         }
     }
     

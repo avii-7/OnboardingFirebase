@@ -8,5 +8,5 @@
 import Foundation
 
 protocol SignUpService {
-    func signUp(email: String, fullName: String, password: String) async throws -> User
+    func signUp(email: String, fullName: String, password: String) async -> Result<User, AuthError>
 }

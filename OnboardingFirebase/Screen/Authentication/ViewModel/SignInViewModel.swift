@@ -16,7 +16,7 @@ final class SignInViewModel: ObservableObject {
     }
     
     @Published var isError = false
-    @Published var errorMsg : String?
+    private(set) var errorMsg : String = .empty
     @Published var isEmailSent = false
     
     private let signInService: SignInService
@@ -33,15 +33,16 @@ final class SignInViewModel: ObservableObject {
     
     @MainActor
     func signIn(email: String, password: String) async {
-        do {
-            let user = try await signInService.signIn(email: email, password: password)
+        let result = await signInService.signIn(email: email, password: password)
+        switch result {
+        case .success(let user):
             userSession.updateUser(user: user)
             navigationAction.didSignInFinished()
-        }
-        catch {
-            isError = true
-            errorMsg = error.localizedDescription
-            print(error)
+        case .failure(let error):
+            if error == AuthError.invalidCredentials {
+                isError = true
+                errorMsg = error.localizedDescription
+            }
         }
     }
     

@@ -10,7 +10,7 @@ import Foundation
 final class SignUpViewModel: ObservableObject {
     
     @Published var isError = false
-    @Published var errorMsg : String?
+    private(set) var errorMsg : String = .empty
     
     private let service: SignUpService
     private let userSession: UserSession
@@ -26,14 +26,17 @@ final class SignUpViewModel: ObservableObject {
     @MainActor
     func signUp(email: String, fullName: String, password: String) async {
         do {
-            let user = try await service.signUp(email: email, fullName: fullName, password: password)
-            userSession.updateUser(user: user)
-            actions.didSignUpFinished()
-        }
-        catch {
-            isError = true
-            errorMsg = error.localizedDescription
-            print(error)
+            let result = await service.signUp(email: email, fullName: fullName, password: password)
+            switch result {
+            case .success(let user):
+                userSession.updateUser(user: user)
+                actions.didSignUpFinished()
+            case .failure(let error):
+                if error == AuthError.emailAlreadyInUse {
+                    isError = true
+                    errorMsg = error.localizedDescription
+                }
+            }
         }
     }
 }

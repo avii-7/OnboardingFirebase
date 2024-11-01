@@ -9,6 +9,7 @@ import Foundation
 import FirebaseAuth
 import FirebaseFirestore
 
+
 final class FirebaseAuthentication {
     
     lazy private var auth = Auth.auth()
@@ -24,22 +25,45 @@ final class FirebaseAuthentication {
 // MARK: - SignUp Service
 extension FirebaseAuthentication: SignUpService {
     
-    func signUp(email: String, fullName: String, password: String) async throws -> User {
-        let result = try await auth.createUser(withEmail: email, password: password)
-        try createUserInFirestore(uuid: result.user.uid, email: email, fullName: fullName)
-        let user = User(id: result.user.uid, email: email, fullName: fullName)
-        return user
+    func signUp(email: String, fullName: String, password: String) async -> Result<User, AuthError> {
+        do {
+            let result = try await auth.createUser(withEmail: email, password: password)
+            try createUserInFirestore(uuid: result.user.uid, email: email, fullName: fullName)
+            let user = User(id: result.user.uid, email: email, fullName: fullName)
+            return .success(user)
+        }
+        catch {
+            if let error = error as NSError? {
+                let code = AuthErrorCode(rawValue: error.code)
+                if code == .emailAlreadyInUse {
+                    return .failure(.emailAlreadyInUse)
+                }
+            }
+            return .failure(.unknown(error.localizedDescription))
+        }
     }
 }
 
 // MARK: - SignIn Service
 extension FirebaseAuthentication: SignInService {
     
-    func signIn(email: String, password: String) async throws -> User {
-        let result = try await auth.signIn(withEmail: email, password: password)
-        let authUser = result.user
-        let user = try await firestore.collection("users").document(authUser.uid).getDocument()
-        return try user.data(as: User.self)
+    func signIn(email: String, password: String) async -> Result<User, AuthError> {
+        do {
+            let result = try await auth.signIn(withEmail: email, password: password)
+            let authUser = result.user
+            let userDoc = try await firestore.collection("users").document(authUser.uid).getDocument()
+            let user = try userDoc.data(as: User.self)
+            return .success(user)
+        }
+        catch {
+            if let error = error as NSError? {
+                let code = AuthErrorCode(rawValue: error.code)
+                if code == .invalidCredential {
+                    return .failure(.invalidCredentials)
+                }
+            }
+            return .failure(.unknown(error.localizedDescription))
+        }
     }
 }
 

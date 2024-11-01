@@ -74,6 +74,13 @@ struct SignUpView: View {
                 }
             }
             
+            if viewModel.isError {
+                Text(viewModel.errorMsg)
+                    .font(.footnote)
+                    .foregroundStyle(.red).opacity(0.8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+            }
+            
             Spacer()
             
             Button("Create Account") {
@@ -93,7 +100,11 @@ struct SignUpView: View {
 #Preview {
     NavigationStack {
         SignUpView(
-            viewModel: SignUpViewModel(service: SignUpServiceStub(), userSession: UserSessionStub(), actions: .init(didSignUpFinished: { }))
+            viewModel: SignUpViewModel(
+                service: SignUpServiceStub(),
+                userSession: UserSessionStub(),
+                actions: .init(didSignUpFinished: { })
+            )
         )
     }
 }
