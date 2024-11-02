@@ -15,6 +15,10 @@ struct SignInView: View {
     
     @StateObject private var viewModel: SignInViewModel
     
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
+    
+    @State private var showNetworkAlert = false
+    
     init(viewModel: SignInViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
@@ -25,6 +29,7 @@ struct SignInView: View {
             .ignoresSafeArea(edges: .top)
             .padding(.horizontal)
             .padding(.vertical, 5)
+            .alert("Internet connection not available", isPresented: $showNetworkAlert) { }
     }
 }
 
@@ -79,6 +84,12 @@ extension SignInView {
             .padding(.vertical)
             
             Button("SignIn") {
+                
+                guard networkMonitor.isConnected else {
+                    showNetworkAlert = true
+                    return
+                }
+                
                 Task {
                     await viewModel.signIn(email: email, password: password)
                 }
@@ -161,6 +172,8 @@ extension SignInView {
     private func spacer(spacing: CGFloat = 35) -> some View {
         Spacer().frame(height: spacing)
     }
+    
+    
 }
 
 #Preview {

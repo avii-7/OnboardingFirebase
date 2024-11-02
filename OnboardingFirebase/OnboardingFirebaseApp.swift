@@ -14,6 +14,8 @@ struct OnboardingFirebaseApp: App {
     
     @StateObject private var appCoordinator = AppCoordinator(path: NavigationPath(), dIContainer: AppDIContainer())
     
+    @StateObject private var networkMonitor = NetworkMonitor()
+    
     var body: some Scene {
         WindowGroup {
             NavigationStack(path: $appCoordinator.path) {
@@ -25,6 +27,7 @@ struct OnboardingFirebaseApp: App {
                         item.view
                     })
             }
+            .environmentObject(networkMonitor)
         }
     }
 }

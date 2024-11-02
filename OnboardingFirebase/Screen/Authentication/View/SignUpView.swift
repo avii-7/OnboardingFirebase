@@ -19,16 +19,21 @@ struct SignUpView: View {
     
     @StateObject private var viewModel: SignUpViewModel
     
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
+    
+    @State private var showNetworkAlert = false
+    
     init(viewModel: SignUpViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
     
     var body: some View {
         content
-        .padding(.horizontal)
-        .navigationTitle("Set up your account")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarRole(.editor)
+            .padding(.horizontal)
+            .navigationTitle("Set up your account")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarRole(.editor)
+            .alert("Internet connection not available", isPresented: $showNetworkAlert) { }
     }
     
     private var content: some View {
@@ -84,6 +89,11 @@ struct SignUpView: View {
             Spacer()
             
             Button("Create Account") {
+                guard networkMonitor.isConnected else {
+                    showNetworkAlert = true
+                    return
+                }
+                
                 Task {
                     await viewModel.signUp(email: email, fullName: fullName, password: password)
                 }

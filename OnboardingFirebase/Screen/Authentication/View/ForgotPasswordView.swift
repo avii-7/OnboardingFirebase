@@ -13,6 +13,10 @@ struct ForgotPasswordView: View {
     
     @ObservedObject private var viewModel: ForgotPasswordViewModel
     
+    @EnvironmentObject private var networkMonitor: NetworkMonitor
+    
+    @State private var showNetworkAlert = false
+    
     init(viewModel: ForgotPasswordViewModel) {
         self.viewModel = viewModel
     }
@@ -37,6 +41,12 @@ struct ForgotPasswordView: View {
             .padding(.top, 15)
             
             Button("Send Instructions") {
+                
+                guard networkMonitor.isConnected else {
+                    showNetworkAlert = true
+                    return
+                }
+                
                 Task {
                     await viewModel.forgotPassword(email: email)
                 }
@@ -48,6 +58,7 @@ struct ForgotPasswordView: View {
         }
         .padding()
         .toolbarRole(.editor)
+        .alert("Internet connection not available", isPresented: $showNetworkAlert) { }
     }
 }
 
